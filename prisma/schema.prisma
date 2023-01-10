@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator nestjsDto {
+  provider                        = "prisma-generator-nestjs-dto"
+  output                          = "../src/generated"
+  outputToNestJsResourceStructure = "true"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Player {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String    
+  email         String    @unique
+  phone         String    
+  ranking       String?
+  rankPosition  Int?
+  urlPhoto      String?
+  /// @DtoRelationRequired
+  /// @DtoRelationCanConnectOnCreate
+  category      Category   @relation(fields: [categoryId], references: [id])   
+  categoryId    String     @db.ObjectId
+  created_at    DateTime?  @default(now())
+  updated_at    DateTime?  @updatedAt
+
+  @@map("players")
+}
+
+model Category {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String    
+  players       Player[]
+  created_at    DateTime?  @default(now())
+  updated_at    DateTime?  @updatedAt
+
+  @@map("categories")
+}

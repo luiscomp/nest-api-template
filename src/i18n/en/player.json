@@ -1,0 +1,6 @@
+{
+    "one": "Player",
+    "other": "Players",
+    "not_found": "$t(player.one) not found.",
+    "email_already_exists": "$t(player.one) with this email already exists."
+}
